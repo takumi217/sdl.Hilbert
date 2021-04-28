@@ -9,6 +9,10 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final static String TAG = "MainActivity";
+
+    private final static String KEY_NAME = "MainActivity.order";
+
     private final static int MAX_ORDER = 9;
     private int order = 1;
 
@@ -26,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
         hilbertView = findViewById(R.id.hilbert_view);
         decButton = findViewById(R.id.dec_button);
         incButton = findViewById(R.id.inc_button);
+
+        if (savedInstanceState != null) {
+            order = savedInstanceState.getInt(KEY_NAME);
+        }
 
         decButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,12 +59,21 @@ public class MainActivity extends AppCompatActivity {
         display();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_NAME, order);
+    }
+
     private void display() {
         orderView.setText(getString(R.string.order_view_format, order));
         hilbertView.setOrder(order);
         decButton.setEnabled(order > 1);
         incButton.setEnabled(order < MAX_ORDER);
     }
+
+
+
 
     public static void assertTrue(boolean f, String message) {
         if (BuildConfig.DEBUG && !f) {
